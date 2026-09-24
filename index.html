@@ -479,7 +479,7 @@ function renderMatrix(){const t=$('#cm');if(!palette.length){t.innerHTML='';retu
 function renderInspector(){const rgb=hexToRgb(cur),h=rgbToHsl(...rgb),c=rgbToCmyk(...rgb);
  $('#bigsw').style.background=cur;$('#bigsw').style.color=bestText(cur);$('#biglbl').textContent=title(namedOf(cur));
  $('#hexin').value=cur;$('#pickin').value=cur;$('#sH').value=h[0];$('#sS').value=h[1];$('#sL').value=h[2];$('#vH').textContent=h[0]+'°';$('#vS').textContent=h[1]+'%';$('#vL').textContent=h[2]+'%';
- $('#inspnote').textContent=(selected!=null&&palette[selected])?`editing the ${palette[selected].role} swatch: sliders update it live`:'pick, type, eyedrop, or select a swatch';
+ $('#inspnote').textContent=(selected!=null&&palette[selected])?`Editing the ${palette[selected].role} swatch: sliders update it live`:'Pick, type, eyedrop, or select a swatch';
  $('#codes').innerHTML=[['HEX',cur],['RGB',`rgb(${rgb.join(', ')})`],['HSL',`hsl(${h[0]}, ${h[1]}%, ${h[2]}%)`],['CMYK',`C${c[0]} M${c[1]} Y${c[2]} K${c[3]}`]].map(([k,v])=>`<div class="chip" data-copy="${v}"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
  const p=nearest(cur,PMS),g=nearest(cur,PIGMENTS);
  $('#matches').innerHTML=(p?`<div class="match"><div class="s" style="background:${p.e.hex}"></div><div class="t"><b>${p.e.code}</b><span>nearest PMS Solid Coated · print reference</span></div><div class="de">ΔE ${p.de}</div></div>`:'')+(g?`<div class="match"><div class="s" style="background:${g.e.hex}"></div><div class="t"><b>${g.e.pigment} · ${g.e.era||''}</b><span>${g.e.note||''}</span></div><div class="de">ΔE ${g.de}</div></div>`:'');
