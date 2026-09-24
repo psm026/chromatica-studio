@@ -39,9 +39,13 @@ button,input,select,textarea{font-family:inherit}
 .sec{margin-top:18px}
 .grid{display:grid;grid-template-columns:1.25fr .95fr;gap:18px}
 @media(max-width:980px){.grid{grid-template-columns:1fr}}
+.grid>*{min-width:0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
-h2{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;display:flex;align-items:center;gap:10px}
+h2{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 h2 .sp{flex:1}
+h2 .lb{white-space:nowrap}
+h2 .note{margin-left:auto;font-family:var(--sans);font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted2);text-align:right;min-width:0;line-height:1.4}
+@media(max-width:640px){h2 .note{margin-left:0;text-align:left;flex-basis:100%}}
 .hint{color:var(--muted2);font-size:11.5px;margin-top:8px}
 .empty{color:var(--muted2);font-size:12.5px;font-style:italic;padding:14px 4px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
@@ -51,6 +55,7 @@ h2 .sp{flex:1}
 /* combos */
 .combos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 @media(max-width:980px){.combos{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.combos{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}.combo{scroll-snap-align:start}.combo:hover{transform:none}}
 .combo{border:1px solid var(--line);border-radius:var(--rs);overflow:hidden;background:var(--panel2);cursor:pointer;transition:.2s}
 .combo:hover{border-color:var(--line2);transform:translateY(-2px)}
 .combo.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
@@ -127,10 +132,12 @@ input[type=color]{width:40px;height:38px;border:1px solid var(--line);border-rad
 .hs:hover .bx .add{opacity:1}
 .hs code{font-family:var(--mono);font-size:9px;color:var(--muted);display:block;margin-top:4px}
 /* prompt + preview */
+#promptcard{display:flex;flex-direction:column}
+#promptcard textarea.pr{flex:1}
 textarea.pr{width:100%;min-height:210px;background:var(--panel2);border:1px solid var(--line);color:#d9dbe3;border-radius:var(--rs);padding:12px 14px;font-size:12.5px;line-height:1.55;resize:vertical;margin-top:10px}
 .pvhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
 .pv{border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.pv-nav{display:flex;align-items:center;gap:16px;padding:13px 18px;font-size:12.5px}
+.pv-nav{display:flex;align-items:center;gap:16px;padding:13px 18px;font-size:12.5px;flex-wrap:wrap}
 .pv-nav .lg{width:20px;height:20px;border-radius:6px}
 .pv-nav .lk{display:flex;gap:14px;margin-left:6px;opacity:.85;font-size:12px}
 .pv-nav .bt{margin-left:auto;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600}
@@ -148,19 +155,35 @@ textarea.pr{width:100%;min-height:210px;background:var(--panel2);border:1px soli
 /* refs */
 .refbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
 .refbar input{flex:1;min-width:180px;background:var(--panel2);border:1px solid var(--line);color:var(--fg);padding:9px 12px;border-radius:9px;font-size:13px}
-.refgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-@media(max-width:900px){.refgrid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:560px){.refgrid{grid-template-columns:repeat(2,1fr)}}
-.rt{border-radius:10px;overflow:hidden;border:1px solid var(--line);aspect-ratio:4/5;position:relative;background:var(--panel2)}
+.refgrid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:150px;grid-auto-flow:dense;gap:10px}
+@media(max-width:900px){.refgrid{grid-template-columns:repeat(3,1fr);grid-auto-rows:140px}}
+@media(max-width:560px){.refgrid{grid-template-columns:repeat(2,1fr);grid-auto-rows:118px}}
+.rt{border-radius:10px;overflow:hidden;border:1px solid var(--line);position:relative;background:var(--panel2);display:block;color:#fff;text-decoration:none}
+.rt.hero{grid-column:span 2;grid-row:span 2}
+.rt.wide{grid-column:span 2}
 .rt.ld::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.07) 50%,transparent 70%);animation:shine 1.4s infinite;z-index:1}
 @keyframes shine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.rt img{position:relative;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:.4s}
+.rt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .4s,transform .6s}
 .rt img.ok{opacity:1}
-.rt .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 9px 7px;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.72));z-index:2}
+a.rt:hover img{transform:scale(1.03)}
+.rt.gone img{display:none}
+.rt .cap{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,.78));z-index:2}
+.rt .why{font-size:11.5px;font-weight:600;line-height:1.3;opacity:0;transform:translateY(4px);transition:.2s}
+.rt.hero .why{font-size:13px}
+.rt.hero .why,a.rt:hover .why,a.rt:focus .why{opacity:1;transform:none}
+.rt .by{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;opacity:.78;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt .dots{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:2}
+.rt .dots i{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 1.5px rgba(255,255,255,.92),0 0 0 2.5px rgba(0,0,0,.4),0 1px 4px rgba(0,0,0,.4)}
+.rt.study .cap{background:none}
+@media(hover:none){.rt .why{opacity:1;transform:none}}
 /* library */
 .exsw{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
 .exsw .bx{width:40px;height:40px;border-radius:8px;border:1px solid var(--line);cursor:pointer}
 #canvas{max-width:100%;border-radius:10px;border:1px solid var(--line);cursor:crosshair;display:none;margin-top:12px}
+.drop{margin-top:12px;border:1.5px dashed var(--line2);border-radius:12px;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;color:var(--muted);font-size:12.5px;cursor:pointer;transition:.15s;padding:18px}
+.drop b{color:var(--fg);font-weight:600;font-size:13.5px}
+.drop small{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--muted2);margin-top:4px}
+.drop:hover,.drop.over,#imgcard.over .drop{border-color:var(--accent);color:var(--fg)}
 .colls{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
 .cp{display:inline-flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 8px 5px 6px;font-size:12px;cursor:pointer}
 .cp .dots{display:flex;gap:2px}.cp .dots i{width:10px;height:10px;border-radius:50%;display:block}
@@ -182,6 +205,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
 .guide kbd{font-family:var(--mono);font-size:11px;background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:1px 6px;color:var(--fg)}
 .guide .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
 @media(max-width:520px){.guide .st{grid-template-columns:1fr;gap:4px}}
+@media(max-width:640px){.bar{position:static}.bar .in{padding:10px 14px;gap:8px}.wrap{padding:0 12px 60px}.card{padding:16px 14px}.sw{min-height:84px}.wshead .title{font-size:21px}.pv-nav .lk{display:none}.pv-hero{padding:24px 18px}.pv-cards{padding:0 18px 18px}}
 </style>
 </head>
 <body>
@@ -203,7 +227,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
 
 <div class="wrap">
   <section class="card sec" id="combosec" hidden>
-    <h2>✦ Combinations <span class="sp"></span><span class="hint" style="margin:0" id="combonote"></span></h2>
+    <h2><span class="lb">✦ Combinations</span><span class="note" id="combonote"></span></h2>
     <div class="combos" id="combos"></div>
   </section>
 
@@ -227,7 +251,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
     </section>
 
     <section class="card">
-      <h2>◐ Inspector <span class="sp"></span><span class="hint" style="margin:0" id="inspnote"></span></h2>
+      <h2><span class="lb">◐ Inspector</span><span class="note" id="inspnote"></span></h2>
       <div class="insp">
         <div class="bigsw" id="bigsw"><span id="biglbl"></span></div>
         <div>
@@ -252,8 +276,8 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
   </div>
 
   <div class="grid sec">
-    <section class="card">
-      <h2>✎ Prompt generator <span class="sp"></span><div class="seg" id="ptabs"><button class="on" data-p="brief">creative brief</button><button data-p="ai">AI image prompt</button></div><button class="b sm" id="copyprompt">Copy</button></h2>
+    <section class="card" id="promptcard">
+      <h2><span class="lb">✎ Prompt generator</span><span class="sp"></span><div class="seg" id="ptabs"><button class="on" data-p="brief">creative brief</button><button data-p="ai">AI image prompt</button></div><button class="b sm" id="copyprompt">Copy</button></h2>
       <textarea class="pr" id="prompt" readonly></textarea>
       <div class="hint">Written from the current palette: hierarchy, mood, pigments, contrast. Hand it to a person, or paste it into an image tool.</div>
     </section>
@@ -264,16 +288,17 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
   </div>
 
   <section class="card sec">
-    <h2>❖ Real-life references</h2>
+    <h2><span class="lb">❖ Real-life references</span></h2>
     <div class="refbar"><input id="refkw" spellcheck="false" placeholder="vibe keywords"><button class="b sm" id="refgo">Find</button><button class="b sm" id="refshuffle">↻ Shuffle</button></div>
     <div class="refgrid" id="refgrid"></div>
-    <div class="hint">Real photos matched to the concept / color keywords. Offline, tiles fall back to palette gradients. Edit the keywords to steer them.</div>
+    <div class="hint" id="refnote">Real photos for the idea, ranked by how closely their colors match this palette.</div>
   </section>
 
   <div class="grid sec">
-    <section class="card">
+    <section class="card" id="imgcard">
       <h2>◲ From an image</h2>
       <div class="row"><button class="b sm" id="uploadbtn">⬆ Upload image</button><input type="file" id="filein" accept="image/*" style="display:none"><button class="b sm" id="buildfromimg" disabled>Build palette from image</button></div>
+      <div class="drop" id="drop"><b>Drop a photo, screenshot or mood board here</b><span>or paste it with ⌘V, or click to browse</span><small>STAYS ON YOUR COMPUTER. NOTHING IS UPLOADED.</small></div>
       <div class="exsw" id="exsw"></div>
       <canvas id="canvas"></canvas>
       <div class="hint">Auto-extracts dominant colors · click the image to sample a pixel · shift-click a chip to add it.</div>
@@ -316,7 +341,8 @@ const NAMED=[{"code":"11-0103","name":"egret","hex":"#F3ECE0"},{"code":"11-0602"
 const $=s=>document.querySelector(s);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rnd=(a,b)=>a+Math.random()*(b-a);
-const title=s=>(s||'').replace(/\b\w/g,c=>c.toUpperCase());
+const SMALLW=new Set(['of','and','the','a','an','in','on','at','by','for','to','with','de','du','la','le','del','van','von']);
+const title=s=>(s||'').split(' ').map((w,i)=>i>0&&SMALLW.has(w.toLowerCase())?w.toLowerCase():w.replace(/(^|[-(])([a-z\u00e0-\u00ff])/g,(m,p,c)=>p+c.toUpperCase())).join(' ');
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1300);}
 function copy(t,msg){try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t);}else{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}toast(msg||'Copied');}catch(e){toast('Copy failed');}}
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
@@ -332,7 +358,8 @@ function lin(c){c/=255;return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4);}
 function relLum([r,g,b]){return .2126*lin(r)+.7152*lin(g)+.0722*lin(b);}
 function contrast(h1,h2){const l1=relLum(hexToRgb(h1)),l2=relLum(hexToRgb(h2));const hi=Math.max(l1,l2),lo=Math.min(l1,l2);return Math.round((hi+.05)/(lo+.05)*100)/100;}
 function grade(r){return r>=7?'AAA':r>=4.5?'AA':r>=3?'AA-L':'FAIL';}
-function labOf(h){const[r,g,b]=hexToRgb(h).map(lin);const x=r*.4124+g*.3576+b*.1805,y=r*.2126+g*.7152+b*.0722,z=r*.0193+g*.1192+b*.9505;const f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116;const fx=f(x/.95047),fy=f(y),fz=f(z/1.08883);return[116*fy-16,500*(fx-fy),200*(fy-fz)];}
+function labOf(h){return labRgb(...hexToRgb(h));}
+function labRgb(R,G,B){const[r,g,b]=[R,G,B].map(lin);const x=r*.4124+g*.3576+b*.1805,y=r*.2126+g*.7152+b*.0722,z=r*.0193+g*.1192+b*.9505;const f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116;const fx=f(x/.95047),fy=f(y),fz=f(z/1.08883);return[116*fy-16,500*(fx-fy),200*(fy-fz)];}
 function bestText(h){return contrast(h,'#000000')>=contrast(h,'#FFFFFF')?'#000000':'#FFFFFF';}
 const hsl=(h,s,l)=>rgbToHex(...hslToRgb(h,s,l));
 const H=h=>rgbToHsl(...hexToRgb(h));
@@ -413,7 +440,7 @@ function makeCombos(an){const B=an.base,k=an.key,keyAt=i=>k==='mid'?(i%2===0?'li
 /* ============================== state ============================== */
 let cur='#4A6FA5',selected=null,palette=[],seed={h:216,s:40,lb:0},kind='split-comp',concept='',combos=[],activeCombo=-1;
 let past=[],future=[],collections=store.get('chromatica_collections',[]);
-let refSeed=Math.floor(Math.random()*9000),cvd='none',pvMode='dark',ptab='brief',htype='analogous',dragging=false;
+let cvd='none',pvMode='dark',ptab='brief',htype='analogous',dragging=false;
 const snap=()=>JSON.stringify({palette,kind,seed,concept});
 function pushHistory(){past.push(snap());if(past.length>60)past.shift();future=[];}
 function restore(s){const o=JSON.parse(s);palette=o.palette||[];kind=o.kind||kind;seed=o.seed||seed;concept=o.concept||'';selected=null;activeCombo=-1;renderAll();}
@@ -423,7 +450,7 @@ const byRole=r=>palette.find(x=>x.role===r);
 function R(){const sorted=[...palette].sort((a,b)=>relLum(hexToRgb(a.hex))-relLum(hexToRgb(b.hex)));const g=(role,fb)=>(byRole(role)||fb||{hex:'#888888'}).hex;
  return{D:g('Dominant',sorted[0]),S:g('Secondary',sorted[1]||sorted[0]),U:g('Support',sorted[Math.floor(sorted.length/2)]),A:g('Accent',sorted[sorted.length-2]||sorted[0]),T:g('Text',sorted[sorted.length-1])};}
 function nameOf(){if(!palette.length)return'Untitled palette';if(activeCombo>=0&&combos[activeCombo])return combos[activeCombo].name;const r=R();return`${title(namedOf(r.D))} & ${title(namedOf(r.A))}`;}
-function conceptKeywords(){const w=concept?words(concept).slice(0,3):[];return w.length?w.join(', '):hueKeywords(palette.length?R().D:cur);}
+function conceptKeywords(){const w=concept?words(concept).slice(0,5):[];return w.length?w.join(', '):hueKeywords(palette.length?R().D:cur);}
 function setPv(m){pvMode=m;[...$('#pvmode').children].forEach(x=>x.classList.toggle('on',x.dataset.m===m));}
 function nativePv(){if(!palette.length)return;const r=R();setPv(relLum(hexToRgb(r.D))<relLum(hexToRgb(r.T))?'dark':'light');}
 const RI={Dominant:'D',Secondary:'S',Support:'U',Accent:'A',Text:'T'},IR={D:'Dominant',S:'Secondary',U:'Support',A:'Accent',T:'Text'};
@@ -473,22 +500,80 @@ function renderPreview(){const el=$('#preview');if(!palette.length){el.innerHTML
  el.innerHTML=`<div class="pv" style="background:${bg};color:${text}"><div class="pv-nav" style="border-bottom:1px solid ${ln}"><div class="lg" style="background:${acc}"></div><b style="font-family:var(--serif);font-size:14px">${nameOf()}</b><span class="lk"><span>Work</span><span>Studio</span><span>Journal</span></span><span class="bt" style="background:${prim};color:${onP}">Contact</span></div>
  <div class="pv-hero"><div class="eb" style="color:${acc}">${moodOf().val} · ${kind}</div><h3>Design that moves at the speed of thought.</h3><p style="color:${mu}">Your palette in a real interface: headings, body copy, and two calls-to-action, using the exact role assignments above.</p><div class="pv-cta"><span style="background:${prim};color:${onP}">Primary action</span><span style="border:1px solid ${acc};color:${acc}">Secondary</span></div></div>
  <div class="pv-cards">${[['New','The collection','Surfaces carry the cards; support drives every action.'],['Process','How it is made','The accent stays rare, one moment per view.'],['Journal','Field notes','Text holds its contrast on every surface.']].map(([c,h,t])=>`<div class="pv-card" style="background:${surf};color:${text}"><span class="ch" style="background:${acc};color:${onA}">${c}</span><h5>${h}</h5><div style="color:${mu}">${t}</div></div>`).join('')}</div></div>`;}
-function renderRefs(kw){kw=(kw||conceptKeywords()).trim();$('#refkw').value=kw;const r=palette.length?R():{D:cur,A:cur};const grad=`linear-gradient(135deg,${r.D},${r.A})`;const caps=['in the wild','texture','light','scene','detail'];
- $('#refgrid').innerHTML=[0,1,2,3,4].map(i=>`<div class="rt ld" style="background:${grad}"><img src="https://loremflickr.com/480/600/${encodeURIComponent(kw)}?lock=${refSeed+i}" loading="lazy" referrerpolicy="no-referrer" onload="this.classList.add('ok');this.parentNode.classList.remove('ld')" onerror="this.parentNode.classList.remove('ld');this.remove()"><div class="cap">${kw.split(',')[0]} · ${caps[i]}</div></div>`).join('');}
+/* Reference board: real photos for the idea from Openverse (Wikimedia Commons as backup),
+   ranked by how closely each photo's colors match the live palette (CIE Lab distance). */
+let refToken=0,refPool=[],refOff=0,refKw='';
+const REFCACHE='chromatica_refs',REFLAYOUT=['hero','','','','','wide','',''];
+function refQueries(kw){const parts=(kw||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);if(!parts.length)return[];
+ if(parts.some(x=>x.includes(' ')))return[...new Set(parts)].slice(0,3);
+ const era=/^(\d{2,4}s|\d{4})$/,core=parts.filter(x=>!era.test(x));if(!core.length)return[parts.join(' ')];
+ const lead=core.length<parts.length?'vintage '+core.slice(0,2).join(' '):core.slice(0,3).join(' ');
+ return[...new Set([lead,core.slice(-2).join(' '),core[core.length-1]])];}
+function licLabel(l,v){l=(l||'').toLowerCase();if(l==='cc0')return'CC0';if(l==='pdm')return'Public domain';return l?`CC ${l.toUpperCase()}${v?' '+v:''}`:'';}
+async function getJSON(u,ms){const ac=typeof AbortController==='function'?new AbortController():null,t=setTimeout(()=>ac&&ac.abort(),ms||8000);
+ try{const r=await fetch(u,ac?{signal:ac.signal}:{});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(t);}}
+async function searchOpenverse(q){const j=await getJSON(`https://api.openverse.org/v1/images/?q=${encodeURIComponent(q)}&page_size=16&mature=false`);
+ return(j.results||[]).map(x=>({id:'ov:'+x.id,thumb:x.thumbnail||`https://api.openverse.org/v1/images/${x.id}/thumb/`,title:x.title||'Untitled',by:(x.creator||'').slice(0,60),lic:licLabel(x.license,x.license_version),link:x.foreign_landing_url||x.url,src:'Openverse'}));}
+async function searchCommons(q){const j=await getJSON('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=20&gsrsearch='+encodeURIComponent(q+' filetype:bitmap')+'&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=480&iiextmetadatafilter=Artist|LicenseShortName');
+ const strip=x=>String(x||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
+ return Object.values((j.query||{}).pages||{}).filter(p=>p.imageinfo&&p.imageinfo[0].thumburl).map(p=>{const ii=p.imageinfo[0],m=ii.extmetadata||{};
+  return{id:'wc:'+p.pageid,thumb:ii.thumburl,title:p.title.replace(/^File:/,'').replace(/\.[a-z0-9]+$/i,'').replace(/_/g,' '),by:strip(m.Artist&&m.Artist.value).slice(0,60),lic:strip(m.LicenseShortName&&m.LicenseShortName.value),link:ii.descriptionurl,src:'Wikimedia Commons'};});}
+async function findPhotos(kw){const cache=store.get(REFCACHE,{}),key=kw.toLowerCase(),hit=cache[key];if(hit&&Date.now()-hit.t<3*864e5&&hit.items.length)return hit.items;
+ const qs=refQueries(kw),items=[],seen=new Set(),add=(a,qi)=>a.forEach((x,pos)=>{if(!seen.has(x.id)){seen.add(x.id);x.rel=qi*3+pos*.25;items.push(x);}});
+ for(let qi=0;qi<qs.length;qi++){if(qi===2&&items.length>=10)break;try{add(await searchOpenverse(qs[qi]),qi);}catch(e){break;}}
+ if(items.length<8&&qs[0]){try{add(await searchCommons(qs[0]),2);}catch(e){}}
+ if(items.length){cache[key]={t:Date.now(),items};const ks=Object.keys(cache);if(ks.length>40)ks.sort((a,b)=>cache[a].t-cache[b].t).slice(0,ks.length-40).forEach(k=>delete cache[k]);store.set(REFCACHE,cache);}
+ return items;}
+function loadImg(src){return new Promise(res=>{const i=new Image();i.crossOrigin='anonymous';i.referrerPolicy='no-referrer';const t=setTimeout(()=>res(null),9000);i.onload=()=>{clearTimeout(t);res(i);};i.onerror=()=>{clearTimeout(t);res(null);};i.src=src;});}
+/* A photo's color makeup: its 8 biggest color masses, each with a share of the frame. */
+function photoColors(img){const w=40,h=Math.max(1,Math.round(40*(img.naturalHeight||40)/(img.naturalWidth||40))),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0,w,h);
+ const d=x.getImageData(0,0,w,h).data,bk={};let n=0;for(let i=0;i<d.length;i+=4){const k=(d[i]>>5)+','+(d[i+1]>>5)+','+(d[i+2]>>5),b=bk[k]||(bk[k]={n:0,r:0,g:0,b:0});b.n++;b.r+=d[i];b.g+=d[i+1];b.b+=d[i+2];n++;}
+ return Object.values(bk).sort((a,b)=>b.n-a.n).slice(0,8).map(b=>{const rgb=[b.r/b.n,b.g/b.n,b.b/b.n];return{w:b.n/(n||1),lab:labRgb(...rgb)};});}
+function palTargets(){const W={Dominant:.4,Secondary:.25,Support:.15,Accent:.12,Text:.08};return palette.map(p=>({hex:p.hex,lab:labOf(p.hex),w:W[p.role]||.1,name:title(namedOf(p.hex))}));}
+/* Lower is closer. Vivid palette colors carry more weight than neutrals (every photo has highlights and shadows),
+   grey scans are penalised against a colorful palette, and search relevance is a light tiebreaker. */
+function refScore(cl,pal){if(!cl||!cl.length||!pal.length)return{score:999,shares:[]};const de=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]),ch=l=>Math.hypot(l[1],l[2]);
+ const W=cl.reduce((t,c)=>t+c.w,0)||1,big=cl.filter(c=>c.w/W>=.04),pw=pal.map(p=>p.w*(.35+Math.min(1.3,ch(p.lab)/35))),PW=pw.reduce((t,v)=>t+v,0)||1;
+ const a=cl.reduce((t,c)=>t+c.w/W*Math.min(...pal.map(p=>de(c.lab,p.lab))),0),b=pal.reduce((t,p,i)=>t+pw[i]*Math.min(...cl.map(c=>de(c.lab,p.lab))),0)/PW;
+ const imgC=cl.reduce((t,c)=>t+c.w/W*ch(c.lab),0),palC=pal.reduce((t,p,i)=>t+pw[i]*ch(p.lab),0)/PW,gap=Math.max(0,palC*.6-imgC);
+ return{score:a*.4+b*.6+gap*.5,shares:pal.filter(p=>big.length&&Math.min(...big.map(c=>de(c.lab,p.lab)))<=16).sort((x,y)=>ch(y.lab)-ch(x.lab))};}
+function rankPool(){const pal=palTargets();refPool.forEach(x=>{const r=refScore(x.cl,pal);x.score=r.score+(x.rel||0);x.shares=r.shares;});refPool.sort((a,b)=>a.score-b.score);
+ const lead=[],rest=[],per={};refPool.forEach(x=>{const k=(x.by||x.id).toLowerCase();per[k]=(per[k]||0)+1;(per[k]<=2?lead:rest).push(x);});refPool=lead.concat(rest);}
+function tileHTML(x,i){const dots=(x.shares||[]).map(p=>`<i style="background:${p.hex}" title="${esc(p.name)}"></i>`).join(''),why=x.shares&&x.shares.length?'Shares '+x.shares.slice(0,3).map(p=>esc(p.name)).join(', '):'Mood match, looser on color';
+ return`<a class="rt ${REFLAYOUT[i]||''}" href="${esc(x.link||x.thumb)}" target="_blank" rel="noopener noreferrer" title="${esc(x.title)}"><img src="${esc(x.thumb)}" alt="${esc(x.title)}" crossorigin="anonymous" referrerpolicy="no-referrer" onload="this.classList.add('ok')" onerror="this.parentNode.classList.add('gone')"><div class="cap"><div class="why">${why}</div><div class="by">${esc([x.by,x.lic||x.src].filter(Boolean).join(' · '))}</div></div>${dots?`<div class="dots">${dots}</div>`:''}</a>`;}
+function studyTiles(msg){const r=palette.length?R():{D:cur,S:cur,U:cur,A:cur,T:cur},pairs=[[r.D,r.A],[r.S,r.U],[r.U,r.T],[r.D,r.S],[r.A,r.T],[r.S,r.A],[r.D,r.U],[r.T,r.S]];
+ return pairs.map((p,i)=>`<div class="rt study ${REFLAYOUT[i]||''}" style="background:linear-gradient(135deg,${p[0]},${p[1]})">${i===0?`<div class="cap"><div class="by">${msg}</div></div>`:''}</div>`).join('');}
+function showRefs(){const vis=refPool.filter(x=>x.ok!==false);
+ if(!vis.length){$('#refgrid').innerHTML=studyTiles('palette study');$('#refnote').textContent='No photos came back for these words (offline, or too specific). Try broader keywords. Palette studies meanwhile.';return;}
+ const n=Math.min(8,vis.length),list=[];for(let i=0;i<n;i++)list.push(vis[(refOff+i)%vis.length]);$('#refgrid').innerHTML=list.map(tileHTML).join('');
+ $('#refnote').textContent=`From ${[...new Set(list.map(x=>x.src))].join(' and ')}, ranked by how closely each photo's colors match this palette. The dots show which of your colors it carries. Click a photo for the source.`;}
+async function renderRefs(kw,force){kw=(kw||conceptKeywords()).trim();$('#refkw').value=kw;
+ if(!force&&kw===refKw&&refPool.length){rerankRefs();return;}
+ const tok=++refToken;refKw=kw;refOff=0;refPool=[];
+ if(typeof fetch!=='function'){showRefs();return;}
+ $('#refgrid').innerHTML=REFLAYOUT.map(c=>`<div class="rt ld ${c}"></div>`).join('');$('#refnote').textContent='Finding photos and reading their colors…';
+ let items=[];try{items=await findPhotos(kw);}catch(e){}
+ if(tok!==refToken)return;
+ const got=await Promise.all(items.slice(0,24).map(async x=>{const img=await loadImg(x.thumb);if(!img)return{...x,ok:false};try{return{...x,cl:photoColors(img)};}catch(e){return{...x};}}));
+ if(tok!==refToken)return;
+ refPool=got;rankPool();showRefs();}
+function rerankRefs(){if(!refPool.length)return;rankPool();refOff=0;showRefs();}
+function shuffleRefs(){const n=refPool.filter(x=>x.ok!==false).length;if(n<=8)return renderRefs($('#refkw').value,true);refOff=(refOff+8)%n;showRefs();}
 function renderCollections(){store.set('chromatica_collections',collections);const el=$('#collections');el.innerHTML=collections.length?collections.map((p,i)=>{const cols=(p.items||p.colors||[]).map(x=>typeof x==='string'?x:x.hex);return`<span class="cp" data-load="${i}"><span class="dots">${cols.map(c=>`<i style="background:${c}"></i>`).join('')}</span>${p.name}<b data-del="${i}">×</b></span>`;}).join(''):'<span class="empty">No saved palettes yet.</span>';}
 
 /* ============================== actions ============================== */
 function setColor(h,o){o=o||{};const n=normHex(h);if(!n)return toast('Not a valid hex');cur=n;
  if(selected!=null&&palette[selected]){if(o.hist&&palette[selected].hex!==cur)pushHistory();palette[selected].hex=cur;renderStrip();renderHier();renderTheory();renderMatrix();renderPreview();renderPrompt();persist();}
- renderInspector();renderHarmony();if(o.refs&&!concept)renderRefs();}
+ renderInspector();renderHarmony();if(o.refs)concept?rerankRefs():renderRefs();}
+function comboNote(text,two){return`Four directions for “${text}”. Click one to load it.`+(two?'':' Tip: name two things (“pine forest at dawn”) and card 1 uses both.');}
 function generateCombos(text){text=(text||'').trim();if(!text){toast('Type an idea first');$('#genin').focus();return;}pushHistory();concept=text;const an=analyze(text);seed=an.base;combos=makeCombos(an);$('#combosec').hidden=false;
- $('#combonote').textContent=`4 directions for “${text}”: click one to load it`+(an.others.length?'':' · tip: name two things (“pine forest at dawn”) and card 1 uses both');
- renderCombos();loadCombo(0,true);refSeed=Math.floor(Math.random()*9000);renderRefs(conceptKeywords());toast('4 combinations ready');}
-function loadCombo(i,noHist){if(!combos[i])return;if(!noHist)pushHistory();activeCombo=i;kind=combos[i].kind;palette=combos[i].palette.map(x=>({...x}));selected=null;cur=(byRole('Support')||palette[0]).hex;setPv(combos[i].key==='light'?'light':'dark');renderCombos();renderAll();}
+ $('#combonote').textContent=comboNote(text,an.others.length>0);
+ renderCombos();loadCombo(0,true);renderRefs(conceptKeywords(),true);toast('4 combinations ready');}
+function loadCombo(i,noHist){if(!combos[i])return;if(!noHist)pushHistory();activeCombo=i;kind=combos[i].kind;palette=combos[i].palette.map(x=>({...x}));selected=null;cur=(byRole('Support')||palette[0]).hex;setPv(combos[i].key==='light'?'light':'dark');renderCombos();renderAll();if(!noHist)rerankRefs();}
 function shuffle(){if(!palette.length)return toast('Nothing to shuffle: generate first');if(palette.every(p=>p.locked))return toast('Everything is locked');pushHistory();
  const r=R(),u=H(r.U),a=H(r.A),key=relLum(hexToRgb(r.D))<relLum(hexToRgb(r.T))?'dark':'light',dh=rnd(-18,18);
  const b={h:u[0]+dh,s:clamp(u[1]+rnd(-10,10),15,85),lb:clamp((seed.lb||0)+rnd(-.15,.15),-.8,.8)},fresh=buildPalette(b,a[0]+dh+rnd(-10,10),key,kind==='monochromatic');
- palette=palette.map(p=>p.locked?p:{hex:(fresh.find(f=>f.role===p.role)||{hex:hsl(b.h,b.s,rnd(20,80))}).hex,role:p.role,locked:false});seed=b;activeCombo=-1;renderCombos();renderAll();toast('Shuffled unlocked swatches');}
+ palette=palette.map(p=>p.locked?p:{hex:(fresh.find(f=>f.role===p.role)||{hex:hsl(b.h,b.s,rnd(20,80))}).hex,role:p.role,locked:false});seed=b;activeCombo=-1;renderCombos();renderAll();rerankRefs();toast('Shuffled unlocked swatches');}
 function guessRole(hex){const[h,s,l]=H(hex);if(l<15)return'Dominant';if(l<25)return'Secondary';if(l>85)return'Text';return s>45?'Accent':'Support';}
 function addCurrent(){if(palette.length>=12)return toast('Palette is full (12)');if(palette.some(p=>p.hex===cur))return toast('Already in the palette');pushHistory();palette.push({hex:cur,role:guessRole(cur),locked:false});activeCombo=-1;renderCombos();renderAll();toast('Added '+cur);}
 function removeAt(i){pushHistory();palette.splice(i,1);if(selected===i)selected=null;else if(selected>i)selected--;activeCombo=-1;renderCombos();renderAll();}
@@ -529,7 +614,7 @@ function extract(){const w=64,h=Math.max(1,Math.round(cv.height*64/cv.width));co
  const arr=Object.values(bk).map(b=>({n:b.n,rgb:[b.r/b.n,b.g/b.n,b.b/b.n]})).sort((a,b)=>b.n-a.n);const kept=[];for(const b of arr){if(kept.every(k=>Math.hypot(...k.rgb.map((v,i)=>v-b.rgb[i]))>40))kept.push(b);if(kept.length>=6)break;}
  extracted=kept.map(b=>rgbToHex(...b.rgb));$('#exsw').innerHTML=extracted.map(hx=>`<div class="bx" style="background:${hx}" title="${hx}: click to inspect, shift-click to add" data-ex="${hx}"></div>`).join('');$('#buildfromimg').disabled=!extracted.length;}
 function buildFromImage(){if(!extracted.length)return;pushHistory();const s=[...extracted].sort((a,b)=>relLum(hexToRgb(a))-relLum(hexToRgb(b)));const D=s[0],S=s[1]||s[0];const rest=s.slice(2);const A=rest.length?rest.reduce((m,c)=>H(c)[1]>H(m)[1]?c:m,rest[0]):s[s.length-1];const U=rest.find(c=>c!==A)||S;const light=s[s.length-1];const T=relLum(hexToRgb(light))>.6?light:hsl(H(D)[0],14,93);
- palette=[{role:'Dominant',hex:D},{role:'Secondary',hex:S},{role:'Support',hex:U},{role:'Accent',hex:A},{role:'Text',hex:T}].map(x=>({...x,locked:false}));concept='';selected=null;activeCombo=-1;seed={h:H(D)[0],s:clamp(H(A)[1],20,80),lb:0};nativePv();renderCombos();renderAll();renderRefs(hueKeywords(A));toast('Palette built from image');}
+ palette=[{role:'Dominant',hex:D},{role:'Secondary',hex:S},{role:'Support',hex:U},{role:'Accent',hex:A},{role:'Text',hex:T}].map(x=>({...x,locked:false}));concept='';selected=null;activeCombo=-1;seed={h:H(D)[0],s:clamp(H(A)[1],20,80),lb:0};nativePv();renderCombos();renderAll();renderRefs(hueKeywords(A),true);toast('Palette built from image');}
 
 /* ============================== events ============================== */
 $('#genbtn').addEventListener('click',()=>generateCombos($('#genin').value));
@@ -544,17 +629,23 @@ $('#undo').addEventListener('click',undo);$('#redo').addEventListener('click',re
 $('#share').addEventListener('click',()=>{if(!palette.length)return toast('Nothing to share yet');updateHash();copy(location.href,'Link copied: paste it anywhere');});
 $('#addcur').addEventListener('click',addCurrent);$('#clearpal').addEventListener('click',clearPal);
 $('#hexin').addEventListener('change',e=>setColor(e.target.value,{refs:true,hist:true}));$('#hexin').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();});
-$('#pickin').addEventListener('input',e=>{if(!dragging&&selected!=null){pushHistory();dragging=true;}setColor(e.target.value);});$('#pickin').addEventListener('change',()=>{dragging=false;if(!concept)renderRefs();persist();});
-['sH','sS','sL'].forEach(id=>{const el=$('#'+id);el.addEventListener('input',()=>{if(!dragging&&selected!=null){pushHistory();dragging=true;}setColor(hsl(+$('#sH').value,+$('#sS').value,+$('#sL').value));});el.addEventListener('change',()=>{dragging=false;if(!concept)renderRefs();persist();});});
+$('#pickin').addEventListener('input',e=>{if(!dragging&&selected!=null){pushHistory();dragging=true;}setColor(e.target.value);});$('#pickin').addEventListener('change',()=>{dragging=false;concept?rerankRefs():renderRefs();persist();});
+['sH','sS','sL'].forEach(id=>{const el=$('#'+id);el.addEventListener('input',()=>{if(!dragging&&selected!=null){pushHistory();dragging=true;}setColor(hsl(+$('#sH').value,+$('#sS').value,+$('#sL').value));});el.addEventListener('change',()=>{dragging=false;concept?rerankRefs():renderRefs();persist();});});
 $('#eyedrop').addEventListener('click',async()=>{if(!window.EyeDropper)return toast('Eyedropper needs Chrome or Edge');try{const r=await new EyeDropper().open();setColor(r.sRGBHex,{refs:true,hist:true});}catch(e){}});
 $('#htypes').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;htype=b.dataset.k;renderHarmony();});
 $('#hsw').addEventListener('click',e=>{const a=e.target.closest('[data-add]');if(a){if(palette.length>=12)return toast('Palette is full');if(palette.some(p=>p.hex===a.dataset.add))return toast('Already in the palette');pushHistory();palette.push({hex:a.dataset.add,role:guessRole(a.dataset.add),locked:false});activeCombo=-1;renderCombos();renderAll();toast('Added '+a.dataset.add);return;}const s=e.target.closest('.hs');if(s){selected=null;setColor(s.dataset.c,{refs:true});renderStrip();}});
 $('#ring').addEventListener('click',e=>{const r=e.currentTarget.getBoundingClientRect();const x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;const h=(Math.atan2(y,x)*180/Math.PI+90+360)%360;const[,s,l]=H(cur);setColor(hsl(h,Math.max(s,30),l),{refs:true});});
-$('#refgo').addEventListener('click',()=>{refSeed=Math.floor(Math.random()*9000);renderRefs($('#refkw').value);});
-$('#refshuffle').addEventListener('click',()=>{refSeed=Math.floor(Math.random()*9000);renderRefs($('#refkw').value);});
-$('#refkw').addEventListener('keydown',e=>{if(e.key==='Enter'){refSeed=Math.floor(Math.random()*9000);renderRefs(e.target.value);}});
+$('#refgo').addEventListener('click',()=>renderRefs($('#refkw').value,true));
+$('#refshuffle').addEventListener('click',shuffleRefs);
+$('#refkw').addEventListener('keydown',e=>{if(e.key==='Enter')renderRefs(e.target.value,true);});
 $('#uploadbtn').addEventListener('click',()=>$('#filein').click());
-$('#filein').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{const w=Math.min(600,img.width),h=Math.max(1,Math.round(img.height*w/img.width));cv.width=w;cv.height=h;ctx.drawImage(img,0,0,w,h);cv.style.display='block';extract();toast('Colors extracted');};img.onerror=()=>toast('Could not read that image');img.src=URL.createObjectURL(f);});
+function loadImageFile(f){if(!f||!/^image\//.test(f.type||''))return toast('That is not an image');const img=new Image();img.onload=()=>{const w=Math.min(600,img.width),h=Math.max(1,Math.round(img.height*w/img.width));cv.width=w;cv.height=h;ctx.drawImage(img,0,0,w,h);cv.style.display='block';$('#drop').hidden=true;extract();toast('Colors extracted');};img.onerror=()=>toast('Could not read that image');img.src=URL.createObjectURL(f);}
+$('#filein').addEventListener('change',e=>{loadImageFile(e.target.files&&e.target.files[0]);e.target.value='';});
+$('#drop').addEventListener('click',()=>$('#filein').click());
+['dragenter','dragover'].forEach(ev=>$('#imgcard').addEventListener(ev,e=>{e.preventDefault();$('#imgcard').classList.add('over');}));
+['dragleave','drop'].forEach(ev=>$('#imgcard').addEventListener(ev,e=>{e.preventDefault();$('#imgcard').classList.remove('over');}));
+$('#imgcard').addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)loadImageFile(f);});
+document.addEventListener('paste',e=>{const it=[...((e.clipboardData&&e.clipboardData.items)||[])].find(i=>i.type&&i.type.indexOf('image/')===0);if(!it)return;e.preventDefault();loadImageFile(it.getAsFile());$('#imgcard').scrollIntoView({behavior:'smooth',block:'center'});});
 cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect();const x=Math.floor((e.clientX-r.left)*cv.width/r.width),y=Math.floor((e.clientY-r.top)*cv.height/r.height);const d=ctx.getImageData(x,y,1,1).data;selected=null;setColor(rgbToHex(d[0],d[1],d[2]),{refs:true});renderStrip();toast('Sampled '+cur);});
 $('#exsw').addEventListener('click',e=>{const b=e.target.closest('[data-ex]');if(!b)return;if(e.shiftKey){if(palette.some(p=>p.hex===b.dataset.ex))return toast('Already in the palette');pushHistory();palette.push({hex:b.dataset.ex,role:guessRole(b.dataset.ex),locked:false});activeCombo=-1;renderCombos();renderAll();toast('Added');}else{selected=null;setColor(b.dataset.ex,{refs:true});renderStrip();}});
 $('#buildfromimg').addEventListener('click',buildFromImage);
@@ -585,11 +676,11 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.s
  const fromHash=parseHash();
  if(!fromHash){const s=store.get('chromatica_v2',null);if(s&&s.palette&&s.palette.length){palette=s.palette.map(x=>({hex:x.hex,role:x.role||'Support',locked:!!x.locked}));kind=s.kind||kind;seed=s.seed||seed;concept=s.concept||'';cur=normHex(s.cur)||cur;}}
  if(!palette.length)concept='night skies';
- if(concept){const an=analyze(concept);seed=an.base;combos=makeCombos(an);$('#combosec').hidden=false;$('#combonote').textContent=`4 directions for “${concept}”: click one to load it`;
+ if(concept){const an=analyze(concept);seed=an.base;combos=makeCombos(an);$('#combosec').hidden=false;$('#combonote').textContent=comboNote(concept,true);
   if(!palette.length){activeCombo=0;kind=combos[0].kind;palette=combos[0].palette.map(x=>({...x}));cur=byRole('Support').hex;}
   else{const sig=palette.map(p=>p.hex).join();activeCombo=combos.findIndex(c=>c.palette.map(p=>p.hex).join()===sig);}
   renderCombos();$('#genin').value=concept;}
- nativePv();renderAll();renderCollections();renderRefs(conceptKeywords());if(!store.get('chromatica_guide_seen',false))openGuide();})();
+ nativePv();renderAll();renderCollections();renderRefs(conceptKeywords(),true);if(!store.get('chromatica_guide_seen',false))openGuide();})();
 </script>
 </body>
 </html>
