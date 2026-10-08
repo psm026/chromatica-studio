@@ -1,7 +1,7 @@
 /* Chromatica service worker: network first so updates show up immediately,
    cached copy as a fallback so the installed app still opens offline.
    Only same-origin files are cached; photos and APIs go straight to the network. */
-const CACHE = 'chromatica-v2';
+const CACHE = 'chromatica-v3';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/favicon-64.png'];
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => {})); });
 self.addEventListener('activate', e => e.waitUntil(
@@ -11,6 +11,12 @@ self.addEventListener('fetch', e => {
   const r = e.request;
   if (r.method !== 'GET' || new URL(r.url).origin !== location.origin) return;
   const net = r.mode === 'navigate' ? fetch(r.url, { cache: 'no-cache' }) : fetch(r);
-  e.respondWith(net.then(res => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(r, copy)); } return res; })
+  e.respondWith(net.then(res => {
+    // If the app has moved (the host answers with a redirect), send the browser to the new
+    // address instead of handing back a redirected response, which navigations reject.
+    if (res.redirected && r.mode === 'navigate') return Response.redirect(res.url, 302);
+    if (res.ok && !res.redirected) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(r, copy)); }
+    return res;
+  })
     .catch(() => caches.match(r).then(m => m || caches.match('./index.html'))));
 });
