@@ -1,6 +1,6 @@
 # Chromatica Color Studio
 
-**Open it:** https://psm026.github.io/chromatica-studio/
+**Open it:** https://chromatica.juliojimenez.com
 
 Type an idea, get four palette directions with exact print and screen codes, PMS and
 historical pigment matches, guaranteed contrast, a written brief, an AI image prompt and a
